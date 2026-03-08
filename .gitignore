@@ -1,0 +1,20 @@
+node_modules/
+dist/
+build/
+.gradle/
+*.log
+
+# IDE
+.idea/
+*.iml
+
+# Environment / secrets
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Lock files (optional – remove if you want them tracked)
+# package-lock.json

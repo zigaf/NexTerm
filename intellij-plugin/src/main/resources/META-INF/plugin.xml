@@ -1,0 +1,36 @@
+<idea-plugin>
+    <id>com.nexterm.ssh-manager</id>
+    <name>NexTerm SSH Manager</name>
+    <version>0.1.0</version>
+    <vendor email="hello@nexterm.dev" url="https://github.com/nexterm">NexTerm</vendor>
+
+    <description><![CDATA[
+        SSH Manager inside your IDE — Termius-like experience for WebStorm & IntelliJ.<br/>
+        <ul>
+            <li>Save and manage SSH server connections</li>
+            <li>Connect directly in the integrated terminal</li>
+            <li>Store secrets (sudo password, MySQL root, etc.) securely</li>
+            <li>Auto-fill passwords on prompt detection</li>
+        </ul>
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>org.jetbrains.plugins.terminal</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Tool Window -->
+        <toolWindow
+            id="NexTerm"
+            displayName="NexTerm"
+            anchor="left"
+            factoryClass="com.nexterm.ui.NexTermToolWindowFactory"
+            icon="/icons/nexterm.svg"
+        />
+
+        <!-- Persistent state storage -->
+        <applicationService
+            serviceImplementation="com.nexterm.vault.NexTermVaultService"
+        />
+    </extensions>
+
+</idea-plugin>

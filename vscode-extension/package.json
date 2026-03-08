@@ -1,0 +1,91 @@
+{
+  "name": "nexterm",
+  "displayName": "NexTerm — SSH Manager",
+  "description": "Manage SSH connections inside VSCode with secure secret storage and auto-fill",
+  "version": "0.1.0",
+  "publisher": "nexterm",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other"],
+  "activationEvents": ["onView:nexterm.servers"],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "nexterm",
+          "title": "NexTerm",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "nexterm": [
+        {
+          "id": "nexterm.servers",
+          "name": "Servers"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "nexterm.addServer",
+        "title": "NexTerm: Add Server"
+      },
+      {
+        "command": "nexterm.connect",
+        "title": "NexTerm: Connect to Server"
+      },
+      {
+        "command": "nexterm.editServer",
+        "title": "NexTerm: Edit Server"
+      },
+      {
+        "command": "nexterm.deleteServer",
+        "title": "NexTerm: Delete Server"
+      },
+      {
+        "command": "nexterm.claudeChat",
+        "title": "NexTerm: Claude Chat"
+      },
+      {
+        "command": "nexterm.setApiKey",
+        "title": "NexTerm: Set API Key"
+      }
+    ],
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "nexterm.connect",
+          "when": "view == nexterm.servers",
+          "group": "inline"
+        },
+        {
+          "command": "nexterm.editServer",
+          "when": "view == nexterm.servers"
+        },
+        {
+          "command": "nexterm.deleteServer",
+          "when": "view == nexterm.servers"
+        },
+        {
+          "command": "nexterm.claudeChat",
+          "when": "view == nexterm.servers"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "package": "vsce package"
+  },
+  "dependencies": {
+    "@nexterm/core": "file:../core"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.0.0",
+    "@vscode/vsce": "^2.0.0"
+  }
+}
