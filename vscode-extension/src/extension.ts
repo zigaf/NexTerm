@@ -126,7 +126,7 @@ function createPty(server: ServerConnection): vscode.Pseudoterminal {
 
 async function claudeChatCommand(item?: { serverId: string }) {
   // Get API key
-  let apiKey = process.env.ANTHROPIC_API_KEY || vault.getSetting('anthropic_api_key');
+  let apiKey: string | undefined = process.env.ANTHROPIC_API_KEY || vault.getSetting('anthropic_api_key') || undefined;
   if (!apiKey) {
     apiKey = await vscode.window.showInputBox({
       prompt: 'Enter your Anthropic API key',
@@ -147,16 +147,33 @@ async function claudeChatCommand(item?: { serverId: string }) {
   const claudeSession = new InteractiveClaudeSession({ apiKey });
 
   // If server context available, attach it
+  let serverName: string | null = null;
   if (item?.serverId) {
     const server = vault.getServer(item.serverId);
     if (server) {
       claudeSession.setServerContext(server);
       claudeSessions.set(server.id, claudeSession);
+      serverName = server.name;
     }
   }
 
+  // Command execution callback — finds the matching terminal and sends the command
+  const onRunCommand = serverName
+    ? (command: string) => {
+        const term = vscode.window.terminals.find(t => t.name === `NexTerm: ${serverName}`);
+        if (term) {
+          term.show();
+          term.sendText(command);
+        } else {
+          vscode.window.showWarningMessage(
+            `NexTerm: No active terminal for "${serverName}". Connect to the server first.`,
+          );
+        }
+      }
+    : undefined;
+
   // Open chat panel
-  ClaudeChatPanel.open(extensionUri, claudeSession);
+  ClaudeChatPanel.open(extensionUri, claudeSession, serverName, onRunCommand);
 }
 
 async function setApiKeyCommand() {
